@@ -3,6 +3,9 @@ import torch
 from models import layers
 
 
+# ----------------------------------------------------------------------------
+# Encdoer definitions
+# ----------------------------------------------------------------------------
 class Encoder(torch.nn.Module):
     def __init__(self, z_dim, img_resolution, img_channels, channel_base=128, norm_type="batch"):
         super().__init__()
@@ -47,6 +50,9 @@ class Encoder(torch.nn.Module):
         return latents
 
 
+# ----------------------------------------------------------------------------
+# Dcoder definitions
+# ----------------------------------------------------------------------------
 class Decoder(torch.nn.Module):
     def __init__(self, z_dim, img_resolution, img_channels, channel_base=1024, norm_type="batch"):
         super().__init__()
