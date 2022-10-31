@@ -5,15 +5,22 @@ import torch
 
 
 class AutoEncoderTask(pl.LightningModule):
-    def __init__(self, encoder, decoder, loss_fn, configs):
+    def __init__(self, encoder, decoder, loss_fn, opt_kwargs, scheduler_kwargs=None):
         super().__init__()
         self.encoder = encoder
         self.decoder = decoder
-        self.configs = configs
+        self.opt_kwargs = opt_kwargs
         self.loss = loss_fn
+        self.scheduler_kwargs = scheduler_kwargs
 
     def configure_optimizers(self):
-        return super().configure_optimizers()
+        params = list(self.encoder.parameters()) + list(self.decoder.parameters())
+        opt = torch.optim.Adam(params, **self.opt_kwargs)
+        if self.scheduler_kwargs is not None:
+            scheduler = None
+            # scheduler = torch.optim.lr_scheduler(opt, **self.scheduler_kwargs)
+            return [opt], [scheduler]
+        return opt
 
     def forward(self, x):
         return self.encoder(x)
